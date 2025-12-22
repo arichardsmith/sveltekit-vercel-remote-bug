@@ -9,7 +9,7 @@
 		internal_time = new Date();
 
 		try {
-			const res = await get_time();
+			const res = await get_time('foo');
 			server_time = new Date(res);
 		} catch (err) {
 			error = err;
