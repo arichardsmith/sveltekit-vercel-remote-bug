@@ -2,11 +2,7 @@ node_modules
 
 # Output
 .output
-
-# Allow sharing config.json
-.vercel/output/functions
-.vercel/output/static
-
+.vercel
 .netlify
 .wrangler
 /.svelte-kit
