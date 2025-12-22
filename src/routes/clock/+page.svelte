@@ -39,7 +39,7 @@
 </script>
 
 <header>
-	<h1>The Overengineered Calculator</h1>
+	<h1>The Overengineered Clock</h1>
 </header>
 <nav>
 	<a href={`/clock`} class="current">Clock</a>
