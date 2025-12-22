@@ -11,6 +11,10 @@
 			"handle": "filesystem"
 		},
 		{
+			"src": "^/clock/?(?:/__data.json)?$",
+			"dest": "/clock"
+		},
+		{
 			"src": "^(/[^]*)?/?$",
 			"dest": "/[...op]?__pathname=/$1"
 		},

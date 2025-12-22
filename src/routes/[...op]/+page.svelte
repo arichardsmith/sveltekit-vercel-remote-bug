@@ -21,7 +21,7 @@
 	const current_op_key: string | undefined = $derived(page.params.op);
 	const current_op: OpDef | undefined = $derived(current_op_key ? ops[current_op_key] : undefined);
 
-	const args: number[] = $state([]);
+	const args: number[] = $state([36, 6]);
 
 	let res: Promise<number> | undefined = $state();
 
@@ -36,63 +36,47 @@
 	}
 </script>
 
-<div class="layout">
-	<header>
-		<h1>The Overengineered Calculator</h1>
-	</header>
-	<nav>
-		{#each Object.entries(ops) as [key, value] (key)}
-			<a href={`/${key}`} class:current={key === page.params.op}>{value.name}</a>
-		{/each}
-	</nav>
+<header>
+	<h1>The Overengineered Calculator</h1>
+</header>
+<nav>
+	{#each Object.entries(ops) as [key, value] (key)}
+		<a href={`/${key}`} class:current={key === page.params.op}>{value.name}</a>
+	{/each}
+</nav>
 
-	{#if current_op}
-		<form onsubmit={calculate}>
-			<div class="args">
-				{#each { length: current_op.args }, n}
-					<input type="number" bind:value={args[n]} />
-				{/each}
-			</div>
-			<button>Calculate</button>
-		</form>
+{#if current_op}
+	<form onsubmit={calculate}>
+		<div class="args">
+			{#each { length: current_op.args }, n}
+				<input type="number" bind:value={args[n]} />
+			{/each}
+		</div>
+		<button>Calculate</button>
+	</form>
 
-		{#await res}
-			<output>
-				<pre>Loading...</pre>
-			</output>
-		{:then answer}
-			<output>
-				<pre class="answer">{answer}</pre>
-			</output>
-		{:catch e}
-			<output class="error">
-				{#if e instanceof Error}
-					<p>{e.message}</p>
-				{:else}
-					<code><pre>{JSON.stringify(e, null, 2)}</pre></code>
-				{/if}
-			</output>
-		{/await}
-	{:else}
-		<p class="not-found">Pick something to calculate above.</p>
-	{/if}
-</div>
+	{#await res}
+		<output>
+			<pre>Loading...</pre>
+		</output>
+	{:then answer}
+		<output>
+			<pre class="answer">{answer}</pre>
+		</output>
+	{:catch e}
+		<output class="error">
+			{#if e instanceof Error}
+				<p>{e.message}</p>
+			{:else}
+				<code><pre>{JSON.stringify(e, null, 2)}</pre></code>
+			{/if}
+		</output>
+	{/await}
+{:else}
+	<p class="not-found">Pick something to calculate above.</p>
+{/if}
 
 <style>
-	.layout {
-		--svorange: #ff3e00;
-		--svade: #ff8e60;
-		--svaaade: #ffd8a8;
-		--error: #ffc9c9;
-		--error-text: #b02525;
-
-		margin: 0 auto;
-		max-width: 800px;
-
-		display: grid;
-		gap: 10px;
-	}
-
 	header h1 {
 		color: var(--svorange);
 		margin: 0;
