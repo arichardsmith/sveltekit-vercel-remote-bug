@@ -1,38 +1,23 @@
-# sv
+# Repro for Remote Function Bug On Vercel
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+This repo provides a minimal reproduction showing how ISR settings on a rest parameter route prevent remote functions from receiving their arguments.
 
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
-
-```sh
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
+If you run this locally, or in a staging environment on Vercel then it works. However, the production deploy on vercel results in any calculation returning a `Bad Request` error. The server logs will show:
+```
+Remote function schema validation failed: [
+  {
+    expected: 'array',
+    code: 'invalid_type',
+    path: [],
+    message: 'Invalid input: expected array, received undefined'
+  }
+]
 ```
 
-## Developing
+I've got [a copy deployed on Vercel](https://sveltekit-vercel-remote-bug.vercel.app/) to confirm
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## The Problem
 
-```sh
-npm run dev
+Remote functions create endpoints at the following route `/_app/remote/[id]/[function]?payload={encoded arguments}`. If you have a rest parameter route (i.e., `/[...rest]`) that matches all routes, then the function built to handle this route is the one that handles the remote function calls.
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```sh
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+The catch is, if you set an ISR config for that route, then Vercel strips out any query parameters that aren't explicitly allowed in the configuration—which includes the `payload` parameter used to pass remote function arguments.

@@ -39,8 +39,6 @@
 <div class="layout">
 	<header>
 		<h1>The Overengineered Calculator</h1>
-		{#if current_op}<hr />
-			<h2>{current_op.name}</h2>{/if}
 	</header>
 	<nav>
 		{#each Object.entries(ops) as [key, value] (key)}
@@ -82,7 +80,6 @@
 
 <style>
 	.layout {
-		--pad: 10px;
 		--svorange: #ff3e00;
 		--svade: #ff8e60;
 		--svaaade: #ffd8a8;
@@ -96,24 +93,8 @@
 		gap: 10px;
 	}
 
-	header {
-		display: grid;
-		grid-template-columns: auto auto 1fr;
-		gap: 2ch;
-		align-items: baseline;
-		padding-inline: var(--pad);
+	header h1 {
 		color: var(--svorange);
-	}
-
-	header hr {
-		margin: 0;
-		border: none;
-		border-left: 1px solid var(--svade);
-		height: 100%;
-		width: 0;
-	}
-
-	header :is(h1, h2) {
 		margin: 0;
 	}
 
@@ -121,7 +102,6 @@
 		display: flex;
 		justify-items: start;
 		gap: 3ch;
-		padding-inline: var(--pad);
 	}
 
 	nav a {
@@ -137,8 +117,6 @@
 		--gap: 5px;
 		display: grid;
 		gap: var(--gap);
-
-		padding-inline: var(--pad);
 	}
 
 	.args {
@@ -171,8 +149,8 @@
 	output {
 		background-color: var(--svaaade);
 		color: var(--svorange);
-		padding-inline: var(--pad);
-		min-height: calc(1lh + var(--pad) * 2);
+		padding: 10px;
+		min-height: calc(1lh);
 	}
 
 	.answer {
@@ -188,10 +166,10 @@
 	pre {
 		font-family: monospace;
 		white-space: pre-wrap;
+		margin: 0;
 	}
 
 	.not-found {
-		padding-inline: var(--pad);
 		color: var(--svorange);
 	}
 </style>
