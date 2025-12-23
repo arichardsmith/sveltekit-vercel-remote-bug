@@ -443,30 +443,40 @@ const plugin = function (defaults = {}) {
                 );
             }
 
-            // Ensure remote functions are always handled by the catchall route, which will be symlinked to /_app/remote
-            // This stops them from being affected by ISR config from other routes that match /[...rest] (ref: #15085)
+            if (builder.config.kit.experimental.remoteFunctions) {
+                // Ensure remote functions are always handled by the catchall route, which will be symlinked to /_app/remote
+                // This stops them from being affected by ISR config from other routes that match /[...rest] (ref: #15085)
 
-            const app_path = builder.getAppPath();
-            const remote_dir = path.join(dirs.functions, app_path, "remote"); // e.g., .vercel/output/functions/_app/remote
-            const remote_symlink_path = `${remote_dir}.func`; // e.g., .vercel/output/functions/_app/remote.func
+                const app_path = builder.getAppPath();
+                const remote_dir = path.join(
+                    dirs.functions,
+                    app_path,
+                    "remote",
+                ); // e.g., .vercel/output/functions/_app/remote
+                const remote_symlink_path = `${remote_dir}.func`; // e.g., .vercel/output/functions/_app/remote.func
 
-            const target = path.join(dirs.functions, INTERNAL, "catchall.func");
+                const target = path.join(
+                    dirs.functions,
+                    INTERNAL,
+                    "catchall.func",
+                );
 
-            // Ensure the parent directory exists
-            builder.mkdirp(path.join(dirs.functions, app_path));
+                // Ensure the parent directory exists
+                builder.mkdirp(path.join(dirs.functions, app_path));
 
-            const relative = path.relative(
-                path.dirname(remote_symlink_path),
-                target,
-            );
+                const relative = path.relative(
+                    path.dirname(remote_symlink_path),
+                    target,
+                );
 
-            fs.symlinkSync(relative, remote_symlink_path); // Creates functions/_app/remote.func -> ../../![-]/catchall.func
+                fs.symlinkSync(relative, remote_symlink_path); // Creates functions/_app/remote.func -> ../../![-]/catchall.func
 
-            // Add route to the start of config so it resolves before /[...rest] routes
-            static_config.routes.splice(0, 0, {
-                src: `/${app_path}/remote/.+`,
-                dest: `/${app_path}/remote`, // Maps to the function: /_app/remote
-            });
+                // Add route to the start of config so it resolves before /[...rest] routes
+                static_config.routes.splice(0, 0, {
+                    src: `/${app_path}/remote/.+`,
+                    dest: `/${app_path}/remote`, // Maps to the function: /_app/remote
+                });
+            }
 
             for (const route of builder.routes) {
                 if (is_prerendered(route)) continue;
