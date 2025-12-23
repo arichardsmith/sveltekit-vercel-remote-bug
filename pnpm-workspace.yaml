@@ -2,3 +2,4 @@ onlyBuiltDependencies:
   - esbuild
 packages:
  - example
+ - adapter
