@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { add, sqrt, sub } from '$lib/operations.remote';
+	import { add, sqrt } from '$lib/operations.remote';
 
 	type OpDef = {
 		name: string;
@@ -14,7 +14,6 @@
 			args: 2,
 			run: add
 		},
-		sub: { name: 'Subtract', args: 2, run: sub },
 		sqrt: { name: 'Square Root', args: 1, run: sqrt }
 	};
 
@@ -43,6 +42,7 @@
 	{#each Object.entries(ops) as [key, value] (key)}
 		<a href={`/${key}`} class:current={key === page.params.op}>{value.name}</a>
 	{/each}
+	<a href="/clock">Clock</a>
 </nav>
 
 {#if current_op}
