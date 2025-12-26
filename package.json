@@ -1,5 +1,8 @@
 {
 	"name": "svelte-vercel-remote-bug",
 	"private": true,
-	"version": "0.0.1"
+	"version": "0.0.1",
+	"dependencies": {
+		"@sveltejs/adapter-vercel": "link:../svelte-kit/packages/adapter-vercel"
+	}
 }

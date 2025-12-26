@@ -14,7 +14,7 @@
 		"lint": "prettier --check ."
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-vercel": "workspace:*",
+		"@sveltejs/adapter-vercel": "github:arichardsmith/svelte-kit#fix/vercel-remote-functions&path:/packages/adapter-vercel",
 		"@sveltejs/kit": "^2.49.1",
 		"@sveltejs/vite-plugin-svelte": "^6.2.1",
 		"prettier": "^3.7.4",
