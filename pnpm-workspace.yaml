@@ -1,9 +1,6 @@
 packages:
-  - example
-  - adapter
+    - example
+    - adapter
 
 onlyBuiltDependencies:
-  - esbuild
-
-overrides:
-  '@sveltejs/adapter-vercel': link:../svelte-kit/packages/adapter-vercel
+    - esbuild
